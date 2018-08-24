@@ -1,0 +1,7 @@
+<text>msg: {{msg}}</text>
+<button bindtap="getMsg">获取数据</button>
+<view wx:for="{{players}}" wx:for-item="one">
+  <view>{{index + 1}}. {{one.name}} {{one.money}} {{one.openid}}</view>
+</view>
+
+
