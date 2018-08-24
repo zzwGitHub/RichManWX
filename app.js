@@ -1,5 +1,5 @@
-var url_base = 'http://localhost:8081/RichMan/';
-//var url_base = 'https://ziweb.top/RichMan/';
+//var url_base = 'http://localhost:8081/RichMan/';
+var url_base = 'https://ziweb.top/RichMan/';
 App({
   onLaunch: function (options) {
     // 登录
@@ -14,7 +14,8 @@ App({
               code: res.code
             },
             success: function (res) {
-              wx.setStorageSync('JSESSIONID', res.data)
+              wx.setStorageSync('JSESSIONID', res.data.JSESSIONID)
+              wx.setStorageSync('openid', res.data.openid)
             }
           })
         } else {

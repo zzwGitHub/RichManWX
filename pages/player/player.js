@@ -1,5 +1,5 @@
-var url_base = 'http://localhost:8081/RichMan/';
-//var url_base = 'https://ziweb.top/RichMan/';
+//var url_base = 'http://localhost:8081/RichMan/';
+var url_base = 'https://ziweb.top/RichMan/';
 Page({
 
   /**
@@ -33,7 +33,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.bindWebSocket();
     wx.showShareMenu({  //开启分享按钮
       withShareTicket: true
 
@@ -44,7 +44,7 @@ Page({
   },
   getShareInfo: function () {
     var appShareTicket = wx.getStorageSync('shareTicket');
-    if (appShareTicket != ''){
+    if (appShareTicket != ''){ //单聊的话，则不触发
       var _this = this;
       wx.getShareInfo({
         shareTicket: appShareTicket,
@@ -63,9 +63,10 @@ Page({
             },
             success: function (res) {
               _this.setData({
-                msg: JSON.stringify(res.data.openGId) + '123'
-                //msg: '123123'
+                msg: JSON.stringify(res.data.openGId) 
               })
+
+              // _this.bindWebSocket();
             }
           })
         },
@@ -77,10 +78,13 @@ Page({
       })
     }
   },
-  bindWebSocket :function(){
+  bindWebSocket :function(){//开启 websocket长连接的若干方法
+    var _this = this;
+    var openid = wx.getStorageSync('openid');
+    console.log(openid)
     wx.connectSocket({
-      url: 'ws://127.0.0.1:8081/RichMan/websocket'
-      // url: 'wss://ziweb.top/RichMan/websocket'
+      // url: 'ws://127.0.0.1:8081/RichMan/websocket/' + openid
+      url: 'wss://ziweb.top/RichMan/websocket/' + openid
     })
 
     wx.onSocketOpen(function (res) {
@@ -91,12 +95,15 @@ Page({
     })
     wx.onSocketMessage(function (res) {
       console.log('收到服务器内容：' + res.data)
+      _this.setData({
+        msg: JSON.stringify(res)
+      })
     })
   },
-  WXSendSocketMsg: function () {
-    console.log("WXSendSocketMsg");
+  WXSendSocketMsg: function (msg) { //websocket长连接发送消息
+    console.log(msg);
     wx.sendSocketMessage({
-      data: "balalax"
+      data: msg
     })
   },
 
