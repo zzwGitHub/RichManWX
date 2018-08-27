@@ -13,7 +13,8 @@ Page({
       ]
   },
   getMsg: function () {
-    //var seid = wx.getStorageSync('JSESSIONID');
+    // var seid = wx.getStorageSync('JSESSIONID');
+    // console.log(seid);
     var _this = this;
     wx.request({
       url: url_base + 'test/testSession',
@@ -33,17 +34,22 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.bindWebSocket();
+    
     wx.showShareMenu({  //开启分享按钮
       withShareTicket: true
 
     })
-    this.getShareInfo();
+    
 
     
   },
   getShareInfo: function () {
     var appShareTicket = wx.getStorageSync('shareTicket');
+
+    // var seid = wx.getStorageSync('JSESSIONID');
+    // console.log('JSESSIONID' + seid);
+
+
     if (appShareTicket != ''){ //单聊的话，则不触发
       var _this = this;
       wx.getShareInfo({
@@ -58,13 +64,12 @@ Page({
               iv: res.iv
             },
             header: {
-              'content-type': 'application/json', // 默认值
               "Cookie": "JSESSIONID=" + wx.getStorageSync('JSESSIONID')
             },
             success: function (res) {
-              _this.setData({
-                msg: JSON.stringify(res.data.openGId) 
-              })
+              // _this.setData({
+              //   msg: JSON.stringify(res.data.openGId) 
+              // })
 
               // _this.bindWebSocket();
             }
@@ -81,7 +86,7 @@ Page({
   bindWebSocket :function(){//开启 websocket长连接的若干方法
     var _this = this;
     var openid = wx.getStorageSync('openid');
-    console.log(openid)
+    // console.log(openid)
     wx.connectSocket({
       // url: 'ws://127.0.0.1:8081/RichMan/websocket/' + openid
       url: 'wss://ziweb.top/RichMan/websocket/' + openid
@@ -89,6 +94,7 @@ Page({
 
     wx.onSocketOpen(function (res) {
       console.log('WebSocket连接已打开！')
+      _this.getShareInfo();
     })
     wx.onSocketError(function (res) {
       console.log('WebSocket连接打开失败，请检查！')
@@ -96,8 +102,10 @@ Page({
     wx.onSocketMessage(function (res) {
       console.log('收到服务器内容：' + res.data)
       _this.setData({
-        msg: JSON.stringify(res)
+        msg: "知道了" + res.data,
+        players: JSON.parse(res.data) 
       })
+      console.log('收到服务器内容：' + _this.players)
     })
   },
   WXSendSocketMsg: function (msg) { //websocket长连接发送消息
@@ -118,21 +126,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    this.bindWebSocket();
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+    wx.closeSocket({})
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    wx.closeSocket({})
   },
 
   /**

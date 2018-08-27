@@ -14,8 +14,12 @@ App({
               code: res.code
             },
             success: function (res) {
+              //console.log("wx.login"+JSON.stringify(res))
               wx.setStorageSync('JSESSIONID', res.data.JSESSIONID)
               wx.setStorageSync('openid', res.data.openid)
+
+              var seid = wx.getStorageSync('JSESSIONID');
+              //console.log('JSESSIONID' + seid);
             }
           })
         } else {
@@ -49,7 +53,7 @@ App({
   //   userInfo: null
   // }
   onShow: function (options) {
-    console.log(options)
+    // console.log(options)
     //将分享票据存入本地（如果不是群，则没有这玩意）
     wx.setStorageSync('shareTicket', options.shareTicket)
   },
