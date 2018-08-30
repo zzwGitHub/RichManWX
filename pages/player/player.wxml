@@ -8,7 +8,9 @@
     <text>myMoney: {{myMoney}}</text>
     <!-- <button bindtap="getMsg">获取数据</button> -->
     <view wx:for="{{players}}" wx:for-item="one">
-      <view>{{index + 1}} | {{one.openid}} | {{one.name}} | {{one.money}} | {{one.pic}}</view>
+      <view class="{{one.style}}" bindtap="selectPlayer" data-openid="{{one.openid}}">
+      {{index + 1}} | OPENID:{{one.openid}} | NAME:{{one.name}} | MONEY:{{one.money}} | PIC:{{one.pic}}
+      </view>
     </view>
     
   </view>
@@ -16,10 +18,13 @@
   <view wx:else> 
     <text>-------------BANK------------</text>
     <view wx:for="{{players}}" wx:for-item="one">
-      <view>{{index + 1}}. {{one.openid}}. {{one.name}}. {{one.money}}. {{one.pic}}</view>
+      <view class="{{one.style}}" bindtap="selectPlayer" data-openid="{{one.openid}}">
+      {{index + 1}} | OPENID:{{one.openid}} | NAME:{{one.name}} | MONEY:{{one.money}} | PIC:{{one.pic}}
+      </view>
     </view>
-    <text>人：</text><input bindinput="bankhuman"></input>
-    <text>钱：</text><input bindinput="bankMoney" type='number'></input>
+    <text>指定某人的钱：</text><input bindinput="playerMoney" type='number'></input>
+    <button bindtap="appointOneMoney">确定汇钱</button>
+    <text>指定所有人的钱：</text><input bindinput="bankMoney" type='number'></input>
     <button bindtap="appointMoney">确定汇钱</button>
   </view>
 </block>

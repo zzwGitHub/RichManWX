@@ -7,15 +7,15 @@ Page({
    */
   data: {
     players : [
-      { name: 'ziw', money: 1256, openid: 'sioevmwow23fgsw', pic:''},
-      { name: 'niao', money: 6986, openid: 'ivmeo934j835i', pic: '' }
+      { name: 'ziw', money: 1256, openid: 'sioevmwow23fgsw', pic: '', style:'player-select'},
+      { name: 'niao', money: 6986, openid: 'ivmeo934j835i', pic: '', style:'player-select-not' }
       ],
     myMoney : '2.89',
     switchBtn : '去银行页面',
     BankPower: false,
     isPlayerPage:true,
     settingMoney:'',
-    settingHuman:''
+    settingOneMoney: ''
   },
   switchPAB:function() { //切换玩家视图和银行视图
     if (this.data.isPlayerPage){
@@ -30,6 +30,22 @@ Page({
       })
     }
     
+  },
+  selectPlayer:function(e){
+    var openid = e.currentTarget.dataset.openid;
+    //console.log(openid);
+    var changePlayers = this.data.players;
+    for (var i = 0; i < changePlayers.length; i++) {
+      if (changePlayers[i].openid == openid){
+        changePlayers[i].style = "player-select"
+      }else{
+        changePlayers[i].style = "player-select-not"
+      }
+    }
+    
+    this.setData({
+      players: changePlayers
+    })
   },
   /**
    * 生命周期函数--监听页面加载
@@ -191,11 +207,7 @@ Page({
   },
   ////////////////////////////////bank页面相关方法/////////////////////////////////////////
 
-  bankhuman:function(e){ //与银行人输入框双向绑定
-    this.setData({
-      settingHuman: e.detail.value
-    })
-  },
+  
   bankMoney: function (e) {//与银行钱输入框双向绑定
     this.setData({
       settingMoney: e.detail.value
@@ -206,8 +218,37 @@ Page({
     wx.request({
       url: url_base + 'WXManage/bankSetMoney',
       data: {
-        money: this.data.settingMoney,
-        human: this.data.settingHuman
+        money: this.data.settingMoney
+      },
+      header: {
+        "Cookie": "JSESSIONID=" + wx.getStorageSync('JSESSIONID')
+      },
+      success: function (res) {
+      }
+    })
+  },
+  
+
+  playerMoney: function (e) {//与银行钱输入框双向绑定
+    this.setData({
+      settingOneMoney: e.detail.value
+    })
+  },
+
+  appointOneMoney: function () {  //指定某人的金额
+
+    var playList = this.data.players;
+    var selectOpenid = "";
+    for (var i = 0; i < playList.length; i++) {
+      if (playList[i].style == "player-select") {
+        selectOpenid = playList[i].openid
+      } 
+    }
+    wx.request({
+      url: url_base + 'WXManage/bankSetMoney',
+      data: {
+        money: this.data.settingOneMoney,
+        human: selectOpenid
       },
       header: {
         "Cookie": "JSESSIONID=" + wx.getStorageSync('JSESSIONID')
@@ -216,5 +257,4 @@ Page({
       }
     })
   }
-  
 })
