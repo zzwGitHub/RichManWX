@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/player/player",
+    "pages/accredit/accredit",
     "pages/index/index",
     "pages/logs/logs",
     "pages/playerpage/playerpage"

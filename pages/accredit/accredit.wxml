@@ -1,0 +1,14 @@
+
+
+
+<view wx:if="{{isLogin}}" class="userinfo">
+    <button wx:if="{{!hasAuthority}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image  src="{{avatarUrl}}" mode="cover" class="userinfo-pic"></image>
+      <text class="userinfo-name">{{nickName}}</text>
+    </block>
+  </view>
+  <view>
+    <button bindtap="joinGame">加入</button>
+  </view>
+  

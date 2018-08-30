@@ -1,7 +1,26 @@
-<text>msg: {{msg}}</text>
-<button bindtap="getMsg">获取数据</button>
-<view wx:for="{{players}}" wx:for-item="one">
-  <view>{{index + 1}}. {{one.openid}}</view>
-</view>
+<!-- <text>msg: {{msg}}</text><view></view>-->
 
+<button wx:if="{{BankPower}}" bindtap="switchPAB" >{{switchBtn}}</button>
+
+<block >
+  <!-- 玩家页面 -->
+  <view wx:if="{{isPlayerPage}}">
+    <text>myMoney: {{myMoney}}</text>
+    <!-- <button bindtap="getMsg">获取数据</button> -->
+    <view wx:for="{{players}}" wx:for-item="one">
+      <view>{{index + 1}} | {{one.openid}} | {{one.name}} | {{one.money}} | {{one.pic}}</view>
+    </view>
+    
+  </view>
+  <!-- 银行页面 -->
+  <view wx:else> 
+    <text>-------------BANK------------</text>
+    <view wx:for="{{players}}" wx:for-item="one">
+      <view>{{index + 1}}. {{one.openid}}. {{one.name}}. {{one.money}}. {{one.pic}}</view>
+    </view>
+    <text>人：</text><input bindinput="bankhuman"></input>
+    <text>钱：</text><input bindinput="bankMoney" type='number'></input>
+    <button bindtap="appointMoney">确定汇钱</button>
+  </view>
+</block>
 

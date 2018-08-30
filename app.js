@@ -2,6 +2,7 @@
 var url_base = 'https://ziweb.top/RichMan/';
 App({
   onLaunch: function (options) {
+    var _this = this;
     // 登录
     wx.login({
       success: res => {
@@ -17,9 +18,13 @@ App({
               //console.log("wx.login"+JSON.stringify(res))
               wx.setStorageSync('JSESSIONID', res.data.JSESSIONID)
               wx.setStorageSync('openid', res.data.openid)
-
-              var seid = wx.getStorageSync('JSESSIONID');
-              //console.log('JSESSIONID' + seid);
+              
+              _this.loginCallback();
+              // setTimeout(function(){
+              //   _this.loginCallback()
+              // },5000)
+              //var seid = wx.getStorageSync('JSESSIONID');
+              //console.log('app.js里的JSESSIONID' + res.data.JSESSIONID);
             }
           })
         } else {
@@ -28,6 +33,12 @@ App({
       }
     })
     setInterval(this.refresh, 20 * 60 * 1000) //每20分种向后台请求，以保证session不过期
+
+  
+
+
+
+
     // 获取用户信息
     // wx.getSetting({
     //   success: res => {
@@ -48,6 +59,9 @@ App({
     //     }
     //   }
     // })
+  },
+  testa:function(e){
+    console.log(e)
   },
   // globalData: {
   //   userInfo: null
