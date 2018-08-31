@@ -1,31 +1,95 @@
 <!-- <text>msg: {{msg}}</text><view></view>-->
-
-<button wx:if="{{BankPower}}" bindtap="switchPAB" >{{switchBtn}}</button>
-
 <block >
   <!-- 玩家页面 -->
   <view wx:if="{{isPlayerPage}}">
-    <text>myMoney: {{myMoney}}</text>
-    <!-- <button bindtap="getMsg">获取数据</button> -->
+    <text class='money'>${{myMoney}}</text>
+
+
+    <view class='player-list' >
+      <block wx:for="{{players}}" wx:for-item="one">
+        <view class='player-item {{one.style}}' bindtap="selectPlayer" data-openid="{{one.openid}}">
+          <image src="{{one.pic}}"  class="player-pic"></image>
+          <text class="player-name">{{one.name}}</text>
+        </view>
+      </block>
+    </view>    
+    
+<!-- 
     <view wx:for="{{players}}" wx:for-item="one">
       <view class="{{one.style}}" bindtap="selectPlayer" data-openid="{{one.openid}}">
       {{index + 1}} | OPENID:{{one.openid}} | NAME:{{one.name}} | MONEY:{{one.money}} | PIC:{{one.pic}}
       </view>
     </view>
-    
+-->
+
+    <view style='height:50rpx'></view>
+
+    <text class='label'>下方输入转账金额（需选定一人）：</text>
+    <input class='num-input' bindinput="ptpMoney" type='number'></input>
+    <button class='base-btn' bindtap="givePlayerMoney">确定汇钱</button> 
   </view>
+
+
+
   <!-- 银行页面 -->
   <view wx:else> 
     <text>-------------BANK------------</text>
+
+    <view class='player-list' >
+      <block wx:for="{{players}}" wx:for-item="one">
+        <view class='player-item {{one.style}}' bindtap="selectPlayer" data-openid="{{one.openid}}">
+          <image src="{{one.pic}}"  class="player-pic"></image>
+          <text class="player-name">{{one.name}}</text>
+          <text class="player-name">{{one.money}}</text>
+        </view>
+      </block>
+    </view>    
+<!-- 
     <view wx:for="{{players}}" wx:for-item="one">
       <view class="{{one.style}}" bindtap="selectPlayer" data-openid="{{one.openid}}">
       {{index + 1}} | OPENID:{{one.openid}} | NAME:{{one.name}} | MONEY:{{one.money}} | PIC:{{one.pic}}
       </view>
     </view>
-    <text>指定某人的钱：</text><input bindinput="playerMoney" type='number'></input>
-    <button bindtap="appointOneMoney">确定汇钱</button>
-    <text>指定所有人的钱：</text><input bindinput="bankMoney" type='number'></input>
-    <button bindtap="appointMoney">确定汇钱</button>
+-->
+    <text class='label'>下方输入指定选中人的金额：</text>
+    <input class='num-input' bindinput="playerMoney" type='number'></input>
+    <button class='base-btn' bindtap="appointOneMoney">确定</button>
+    <text class='label'>下方指定所有人的金额：</text>
+    <input class='num-input' bindinput="bankMoney" type='number'></input>
+    <button class='base-btn' bindtap="appointMoney">确定重置</button>
   </view>
 </block>
 
+<!-- 切换页面（有银行管理者权限的人才能看到此按钮） -->
+<button wx:if="{{BankPower}}" bindtap="switchPAB" >{{switchBtn}}</button>
+
+
+
+
+<!-- 
+
+  <view class='player-list'>
+    <view class='player-item'>
+      <image src="https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erY3ibuXWnG1jNM8VvfquXvbLgtWa2GkXVhMogtYAfKSAPMnJtAyiboYrB3Xosm5libEng9XxuLoIryw/132"  class="player-pic"></image>
+      <text class="player-name">midd</text>
+    </view>
+    <view class='player-item'>
+      <image src="https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqzibboHr3bsE74pfRcfql6ibfGcoVzp0HyQrWIZQlQqDGbPZdicEQmoSre0qShonO4ZHErlYH5GL08Q/132"  class="player-pic"></image>
+      <text class="player-name">Kioo</text>
+    </view>
+    <view class='player-item'>
+      <image src="https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erY3ibuXWnG1jNM8VvfquXvbLgtWa2GkXVhMogtYAfKSAPMnJtAyiboYrB3Xosm5libEng9XxuLoIryw/132"  class="player-pic"></image>
+      <text class="player-name">midd</text>
+    </view>
+    <view class='player-item'>
+      <image src="https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqzibboHr3bsE74pfRcfql6ibfGcoVzp0HyQrWIZQlQqDGbPZdicEQmoSre0qShonO4ZHErlYH5GL08Q/132"  class="player-pic"></image>
+      <text class="player-name">Kioo</text>
+    </view>
+    <view class='player-item'>
+      <image src="https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erY3ibuXWnG1jNM8VvfquXvbLgtWa2GkXVhMogtYAfKSAPMnJtAyiboYrB3Xosm5libEng9XxuLoIryw/132"  class="player-pic"></image>
+      <text class="player-name">midd</text>
+    </view>
+
+
+</view>
+-->

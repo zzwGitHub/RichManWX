@@ -1,8 +1,57 @@
 /* pages/player/player.wxss */
 .player-select-not{
-  color: black
+  
 }
 
 .player-select{
-  color: red
+  background-color: gray;
+}
+
+.money{
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  font-weight:900;
+  font-size:xx-large;
+  align-items:center;
+  height: 200rpx;
+}
+
+.player-name{
+  color: black;
+  font-size:x-large;
+}
+
+.player-pic{
+  width: 160rpx;
+  height: 160rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.player-item{
+  display: flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content: center;
+}
+
+.player-list{
+  display: flex;
+  flex-wrap:wrap;
+  margin: 30rpx
+}
+
+.label{
+  margin: 30rpx;
+}
+
+.num-input{
+  margin: 30rpx;
+  border-style: solid;
+  height: 80rpx
+}
+
+.base-btn{
+  margin: 30rpx;
 }

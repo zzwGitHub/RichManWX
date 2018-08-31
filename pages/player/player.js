@@ -7,15 +7,16 @@ Page({
    */
   data: {
     players : [
-      { name: 'ziw', money: 1256, openid: 'sioevmwow23fgsw', pic: '', style:'player-select'},
-      { name: 'niao', money: 6986, openid: 'ivmeo934j835i', pic: '', style:'player-select-not' }
+      // { name: 'ziw', money: 1256, openid: 'sioevmwow23fgsw', pic: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erY3ibuXWnG1jNM8VvfquXvbLgtWa2GkXVhMogtYAfKSAPMnJtAyiboYrB3Xosm5libEng9XxuLoIryw/132', style:'player-select'},
+      // { name: 'niao', money: 6986, openid: 'ivmeo934j835i', pic: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqzibboHr3bsE74pfRcfql6ibfGcoVzp0HyQrWIZQlQqDGbPZdicEQmoSre0qShonO4ZHErlYH5GL08Q/132', style:'player-select-not' }
       ],
-    myMoney : '2.89',
+    myMoney : '0',
     switchBtn : '去银行页面',
     BankPower: false,
     isPlayerPage:true,
-    settingMoney:'',
-    settingOneMoney: ''
+    settingMoney:'', //银行给所有人指定钱的输入框的对应的值
+    settingOneMoney: '',//银行给某人指定钱的输入框的对应的值
+    ptpMoney: ''//某人给某人汇钱的输入框的对应的值
   },
   switchPAB:function() { //切换玩家视图和银行视图
     if (this.data.isPlayerPage){
@@ -205,6 +206,37 @@ Page({
       }
     }
   },
+  ptpMoney: function (e) {//与ptp输入框双向绑定
+    this.setData({
+      ptpMoney: e.detail.value
+    })
+  },
+
+  givePlayerMoney: function () {  //指定向某人汇钱
+
+    var playList = this.data.players;
+    var selectOpenid = "";
+    for (var i = 0; i < playList.length; i++) {
+      if (playList[i].style == "player-select") {
+        selectOpenid = playList[i].openid
+      }
+    }
+    wx.request({
+      url: url_base + 'WXManage/playerSetMoney',
+      data: {
+        money: this.data.ptpMoney,
+        human: selectOpenid
+      },
+      header: {
+        "Cookie": "JSESSIONID=" + wx.getStorageSync('JSESSIONID')
+      },
+      success: function (res) {
+      }
+    })
+  },
+
+
+
   ////////////////////////////////bank页面相关方法/////////////////////////////////////////
 
   
