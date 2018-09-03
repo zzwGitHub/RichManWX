@@ -12,7 +12,7 @@ Page({
     hasAuthority: false,
     nickName : '',
     avatarUrl :''
-
+    
   },
   //这个方法是授权弹框的“确定”和“取消”按钮的响应方法，点击不同，则返回不同
   bindGetUserInfo:function(e){
@@ -63,7 +63,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    wx.showShareMenu({  //开启分享按钮
+      withShareTicket: true
+
+    })
   },
 
   /**
@@ -118,7 +121,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+    
   },
 
   /**
@@ -132,6 +135,15 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-  
+    return {
+      title: '大富翁记账器',
+      path: '/pages/accredit/accredit',
+      success: function (res) {
+        // console.log(res)
+        res.shareTickets // 单聊是没有的
+      }
+    }
   }
+
+
 })

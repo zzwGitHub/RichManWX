@@ -11,7 +11,6 @@
   justify-content: center;
   display: flex;
   flex-direction: row;
-  font-weight:900;
   font-size:xx-large;
   align-items:center;
   height: 200rpx;
@@ -39,7 +38,7 @@
 .player-list{
   display: flex;
   flex-wrap:wrap;
-  margin: 30rpx
+  
 }
 
 .label{

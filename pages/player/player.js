@@ -140,8 +140,50 @@ Page({
     })
   },
   socketShowMyMoney: function (data) {
-    this.setData({
-      myMoney: data
+    if (this.data.myMoney < data){  //如果当前金额小于推送金额，则视为收款
+      this.playGetMoneyVoice();
+    }
+    //带点动画效果~~~~~
+    this.changeMoneyWithAnimation(data);
+    // this.setData({
+    //   myMoney: data
+    // })
+  },
+  //变更“我的金额”，（带动画效果）
+  changeMoneyWithAnimation: function (newMoney) {
+    
+    var that = this;
+    var baseNumber = that.data.myMoney //原数字
+    var difference = newMoney - baseNumber //与原数字的差
+    var absDifferent = Math.abs(difference) //差取绝对值
+    var changeTimes = absDifferent < 6 ? absDifferent : 6 //最多变化6次
+    var changeUnit = absDifferent < 6 ? 1 : Math.floor(difference / 6)  //绝对差除以变化次数
+    // 依次变化
+    for (var i = 0; i < changeTimes; i += 1) {
+      // 使用闭包传入i值，用来判断是不是最后一次变化
+      (function (i) {
+        setTimeout(() => {
+          that.setData({
+            myMoney: (that.data.myMoney*1) + (changeUnit*1)
+          })
+          // 差值除以变化次数时，并不都是整除的，所以最后一步要精确设置新数字
+          if (i == changeTimes - 1) {
+            that.setData({
+              myMoney: newMoney
+            })
+          }
+        }, 100 * (i + 1))
+      })(i)
+    }
+
+  },
+  //播放到账音乐
+  playGetMoneyVoice: function () {
+    var voice = wx.createInnerAudioContext();
+    voice.src = '/source/qy.mp3';
+    voice.play();
+    voice.onEnded((res) => {
+      voice.destroy();
     })
   },
   /**
@@ -198,7 +240,7 @@ Page({
     //   console.log(res.target)
     // }
     return {
-      title: '自定义发标题',
+      title: '大富翁记账器',
       path: '/pages/accredit/accredit',
       success: function (res) {
         // console.log(res)
@@ -221,6 +263,36 @@ Page({
         selectOpenid = playList[i].openid
       }
     }
+
+    if (selectOpenid == "") {
+      wx.showToast({
+        title: '请选择一位玩家',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
+    }
+    var openid = wx.getStorageSync('openid');
+    if (openid == selectOpenid) {
+      wx.showToast({
+        title: '逗呢~~~~自己给自己汇钱？！',
+        icon: 'none',
+        duration: 3000
+      })
+      return;
+    }
+
+    var reg =/^[1-9][0-9]*$/;
+    if (!reg.test(this.data.ptpMoney)) {
+      wx.showToast({
+        title: '请输入正确的金额！',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
+    }
+
+
     wx.request({
       url: url_base + 'WXManage/playerSetMoney',
       data: {
@@ -237,7 +309,7 @@ Page({
 
 
 
-  ////////////////////////////////bank页面相关方法/////////////////////////////////////////
+////////////////////////////////bank页面相关方法/////////////////////////////////////////
 
   
   bankMoney: function (e) {//与银行钱输入框双向绑定
@@ -246,7 +318,7 @@ Page({
     })
   },
   
-  appointMoney:function(){  //指定某人的金额
+  appointMoney:function(){  //指定所有人的金额
     wx.request({
       url: url_base + 'WXManage/bankSetMoney',
       data: {
@@ -275,6 +347,14 @@ Page({
       if (playList[i].style == "player-select") {
         selectOpenid = playList[i].openid
       } 
+    }
+    if (selectOpenid == ""){
+      wx.showToast({
+        title: '请选择一位玩家',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
     }
     wx.request({
       url: url_base + 'WXManage/bankSetMoney',
