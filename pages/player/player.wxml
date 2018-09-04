@@ -24,7 +24,7 @@
 <!--
     <view style='height:50rpx'></view>
 -->
-    <text class='label'>下方输入转账金额（需选定一人）：</text>
+    <text class='label'>下方输入转账金额（需选定一个单位）：</text>
     <input class='num-input' bindinput="ptpMoney" type='text' placeholder="金额" bindconfirm="givePlayerMoney"></input>
     <button class='base-btn' bindtap="givePlayerMoney">确定汇钱</button> 
   </view>

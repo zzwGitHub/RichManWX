@@ -8,7 +8,7 @@ Page({
   data: {
     players : [
       // { name: 'ziw', money: 1256, openid: 'sioevmwow23fgsw', pic: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erY3ibuXWnG1jNM8VvfquXvbLgtWa2GkXVhMogtYAfKSAPMnJtAyiboYrB3Xosm5libEng9XxuLoIryw/132', style:'player-select'},
-      // { name: 'niao', money: 6986, openid: 'ivmeo934j835i', pic: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqzibboHr3bsE74pfRcfql6ibfGcoVzp0HyQrWIZQlQqDGbPZdicEQmoSre0qShonO4ZHErlYH5GL08Q/132', style:'player-select-not' }
+      { name: 'bank', money: '∞', openid: 'bank', pic: '/source/bank.jpg', style:'player-select-not' }
       ],
     myMoney : '0',
     switchBtn : '去银行页面',
@@ -124,8 +124,6 @@ Page({
         
         _this.socketShowMyMoney(resObj.data);
       }
-
-      
     })
   },
   WXSendSocketMsg: function (msg) { //websocket长连接发送消息
@@ -135,12 +133,15 @@ Page({
     })
   },
   socketShowAllPalyers:function(data){
+    //这需要加上银行哦
+    var plsyerObj = JSON.parse(data);
+    plsyerObj.push({ name: 'bank', money: '∞', openid: 'bank', pic: '/source/bank.jpg', style: 'player-select-not' });
     this.setData({
-      players: JSON.parse(data)
+      players: plsyerObj
     })
   },
   socketShowMyMoney: function (data) {
-    if (this.data.myMoney < data){  //如果当前金额小于推送金额，则视为收款
+    if (this.data.myMoney*1 < data*1){  //如果当前金额小于推送金额，则视为收款
       this.playGetMoneyVoice();
     }
     //带点动画效果~~~~~
