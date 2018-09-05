@@ -1,4 +1,6 @@
 <!-- <text>msg: {{msg}}</text><view></view>-->
+<view wx:if="{{isInGroup}}">
+
 <block >
   <!-- 玩家页面 -->
   <view wx:if="{{isPlayerPage}}">
@@ -64,6 +66,20 @@
 
 <!-- 切换页面（有银行管理者权限的人才能看到此按钮） -->
 <button wx:if="{{BankPower}}" bindtap="switchPAB" >{{switchBtn}}</button>
+
+
+
+</view>
+<view wx:else>
+  <text style='color:red'>
+  为了使系统知晓是哪几位用户正在一起玩游戏，所以请玩家们建立一个微信群，然后将小程序转发至该群中，所有玩家须在群中打开本小程序。
+  </text>
+</view>
+
+
+
+
+
 
 
 

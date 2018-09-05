@@ -14,6 +14,7 @@ Page({
     switchBtn : '去银行页面',
     BankPower: false,
     isPlayerPage:true,
+    isInGroup:false, //页面是进入正常游戏页面还是分享提示页面的flag
     settingMoney:'', //银行给所有人指定钱的输入框的对应的值
     settingOneMoney: '',//银行给某人指定钱的输入框的对应的值
     ptpMoney: ''//某人给某人汇钱的输入框的对应的值
@@ -67,6 +68,10 @@ Page({
 
     //console.log('getShareInfo=====getShareInfo======' + appShareTicket);
     if (appShareTicket != ''){ //单聊的话，则不触发
+      this.setData({
+        isInGroup:true
+      })
+
       var _this = this;
       wx.getShareInfo({
         shareTicket: appShareTicket,
@@ -94,6 +99,10 @@ Page({
             text: JSON.stringify(res)
           })
         }
+      })
+    }else{
+      this.setData({
+        isInGroup: false
       })
     }
   },
