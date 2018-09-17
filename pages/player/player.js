@@ -151,7 +151,7 @@ Page({
   },
   socketShowMyMoney: function (data) {
     if (this.data.myMoney*1 < data*1){  //如果当前金额小于推送金额，则视为收款
-      this.playGetMoneyVoice();
+      this.playGetMoneyVoice(data * 1 - this.data.myMoney * 1);
     }
     //带点动画效果~~~~~
     this.changeMoneyWithAnimation(data);
@@ -188,12 +188,50 @@ Page({
 
   },
   //播放到账音乐
-  playGetMoneyVoice: function () {
-    var voice = wx.createInnerAudioContext();
-    voice.src = '/source/qy.mp3';
-    voice.play();
-    voice.onEnded((res) => {
-      voice.destroy();
+  playGetMoneyVoice: function (receiveMoney) {
+    // var voice = wx.createInnerAudioContext();
+    // voice.src = '/source/qy.mp3';
+    // voice.play();
+    // voice.onEnded((res) => {
+    //   voice.destroy();
+    // })
+
+    //语音播放钱数
+    wx.request({
+      url: url_base + 'WXManage/CollectMoneyVoice',
+      data: {
+        receiveMoney: receiveMoney
+      },
+      header: {
+        "Cookie": "JSESSIONID=" + wx.getStorageSync('JSESSIONID')
+      },
+      success: function (res) {
+        console.log(res.data);
+        var mp3Name = res.data;
+        var voice = wx.createInnerAudioContext();
+        voice.src = url_base + 'voice/' + res.data + '.mp3';
+        voice.play();
+        voice.onEnded((res) => {
+          voice.destroy();
+          //还需要把那音频文件删除掉！！！！！！！！
+          wx.request({
+            url: url_base + 'WXManage/deleteVoice',
+            data: {
+              Mp3Name: mp3Name
+            },
+            header: {
+              "Cookie": "JSESSIONID=" + wx.getStorageSync('JSESSIONID')
+            },
+            success: function (res) {
+              console.log(res.data);
+
+            }
+          })
+
+          
+          
+        })
+      }
     })
   },
   /**
